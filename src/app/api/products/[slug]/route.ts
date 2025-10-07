@@ -4,7 +4,7 @@ import data from '../data.json'
 
 export async function GET(
   _: Request,
-  { params }: { params: { slug: string } },
+  { params }: { params: Promise<{ slug: string }> },
 ) {
   await new Promise((resolve) => setTimeout(resolve, 2000))
 

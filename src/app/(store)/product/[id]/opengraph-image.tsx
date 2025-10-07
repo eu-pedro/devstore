@@ -1,11 +1,7 @@
 import { api } from '@/data/api'
 import { Product } from '@/data/types/product'
-import Image from 'next/image'
 import { ImageResponse } from 'next/og'
-import { readFile } from 'node:fs/promises'
-import { join } from 'node:path'
 import { env } from 'node:process'
-import colors from 'tailwindcss/colors'
 
 // Image metadata
 export const alt = 'About Acme'
