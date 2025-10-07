@@ -18,12 +18,14 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           version: 10
+          run_install: false
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
+        name: Install Node.js
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: "pnpm"
+          node-version: 20
+          cache: 'pnpm'
+
       - name: Install dependencies
         run: pnpm install
 
@@ -33,5 +35,5 @@ jobs:
           APP_URL: "http://localhost:3000"
           NEXT_PUBLIC_API_BASE_URL: "https://ignite-devstore-api.vercel.app"
         with:
-          build: pnpm run build
-          start: pnpm run start
+          build: npm run build
+          start: npm start
