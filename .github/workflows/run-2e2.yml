@@ -15,11 +15,10 @@ jobs:
           node-version: 20
 
       - name: Install pnpm
-        uses: actions/checkout@v4
         uses: pnpm/action-setup@v4
         with:
           version: 10
-          
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
