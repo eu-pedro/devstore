@@ -5,14 +5,17 @@ on: push
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Node + cache pnpm
       - name: Install Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'pnpm'
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -20,20 +23,27 @@ jobs:
           version: 10
           run_install: false
 
-      - uses: actions/setup-node@v4
-        name: Install Node.js
+      - name: Cache Cypress binary
+        uses: actions/cache@v4
         with:
-          node-version: 20
-          cache: 'pnpm'
+          path: ~/.cache/Cypress
+          key: cypress-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            cypress-${{ runner.os }}-
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
-      - name: Cypress run
+      - name: Ensure Cypress binary is installed
+        run: pnpm exec cypress install
+
+      - name: Cypress run (E2E)
         uses: cypress-io/github-action@v6
-        env: 
+        env:
           APP_URL: "http://localhost:3000"
           NEXT_PUBLIC_API_BASE_URL: "https://ignite-devstore-api.vercel.app"
         with:
-          build: npm run build
-          start: npm start
+          install: false                 
+          build: pnpm run build
+          start: pnpm start
+          wait-on: 'http://localhost:3000'  
